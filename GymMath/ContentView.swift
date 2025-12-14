@@ -59,7 +59,7 @@ struct ContentView: View {
         .scrollIndicators(.hidden)
         .scrollBounceBehavior(.basedOnSize)
       }
-      .navigationTitle("Logged Items")
+      .navigationTitle("Log")
       .toolbar {
         ToolbarItem {
           Button(action: addItem) {
