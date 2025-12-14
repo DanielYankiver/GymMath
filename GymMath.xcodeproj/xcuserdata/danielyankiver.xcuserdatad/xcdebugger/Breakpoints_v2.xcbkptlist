@@ -18,28 +18,28 @@
             endingLineNumber = "1">
             <Locations>
                <Location
-                  uuid = "C6334A2E-24DA-4283-A058-807787DD96F7 - 648ab8aab7ea703"
+                  uuid = "C6334A2E-24DA-4283-A058-807787DD96F7 - bb34314446047c0b"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "GymMath.LogView.init() -&gt; GymMath.LogView"
                   moduleName = "GymMath.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///var/folders/37/zh6rmp2x3611sjjcn41px2xh0000gn/T/-921379.@__swiftmacro_7GymMath7LogViewV5items33_060117ABCCC532BAED45B366D9B90427LL5QueryfMp_.swift"
+                  urlString = "file:///var/folders/37/zh6rmp2x3611sjjcn41px2xh0000gn/T/-b5db08.@__swiftmacro_7GymMath7LogViewV5items33_060117ABCCC532BAED45B366D9B90427LL5QueryfMp_.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "1"
                   endingLineNumber = "1">
                </Location>
                <Location
-                  uuid = "C6334A2E-24DA-4283-A058-807787DD96F7 - 85eb3d3d4d40b1d9"
+                  uuid = "C6334A2E-24DA-4283-A058-807787DD96F7 - 3897a7f3a03a6ad1"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "default argument 0 of GymMath.LogView.init(_items: _SwiftData_SwiftUI.Query&lt;GymMath.Item, Swift.Array&lt;GymMath.Item&gt;&gt;) -&gt; GymMath.LogView"
                   moduleName = "GymMath.debug.dylib"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///var/folders/37/zh6rmp2x3611sjjcn41px2xh0000gn/T/-921379.@__swiftmacro_7GymMath7LogViewV5items33_060117ABCCC532BAED45B366D9B90427LL5QueryfMp_.swift"
+                  urlString = "file:///var/folders/37/zh6rmp2x3611sjjcn41px2xh0000gn/T/-b5db08.@__swiftmacro_7GymMath7LogViewV5items33_060117ABCCC532BAED45B366D9B90427LL5QueryfMp_.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "1"
