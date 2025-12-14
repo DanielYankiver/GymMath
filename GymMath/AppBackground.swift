@@ -13,8 +13,19 @@ struct AppBackground: View {
       .resizable()
       .scaledToFill()
       .ignoresSafeArea()
-    // Optional: readability for text
-      .overlay(Color.black.opacity(0.25))
+      .overlay(
+        // Liquid-glass readability layer
+        LinearGradient(
+          colors: [
+            Color.black.opacity(0.35),
+            Color.black.opacity(0.15),
+            Color.black.opacity(0.35)
+          ],
+          startPoint: .top,
+          endPoint: .bottom
+        )
+        .ignoresSafeArea()
+      )
   }
 }
 

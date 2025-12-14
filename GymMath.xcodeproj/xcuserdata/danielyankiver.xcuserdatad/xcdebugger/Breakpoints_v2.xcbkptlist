@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "BCE74805-9A63-4F6A-97A4-C861047B4DF3"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C6334A2E-24DA-4283-A058-807787DD96F7"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../../../../var/folders/37/zh6rmp2x3611sjjcn41px2xh0000gn/T/swift-generated-sources/@__swiftmacro_7GymMath7LogViewV5items33_060117ABCCC532BAED45B366D9B90427LL5QueryfMp_.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1"
+            endingLineNumber = "1">
+            <Locations>
+               <Location
+                  uuid = "C6334A2E-24DA-4283-A058-807787DD96F7 - 648ab8aab7ea703"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GymMath.LogView.init() -&gt; GymMath.LogView"
+                  moduleName = "GymMath.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///var/folders/37/zh6rmp2x3611sjjcn41px2xh0000gn/T/-921379.@__swiftmacro_7GymMath7LogViewV5items33_060117ABCCC532BAED45B366D9B90427LL5QueryfMp_.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1"
+                  endingLineNumber = "1">
+               </Location>
+               <Location
+                  uuid = "C6334A2E-24DA-4283-A058-807787DD96F7 - 85eb3d3d4d40b1d9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 0 of GymMath.LogView.init(_items: _SwiftData_SwiftUI.Query&lt;GymMath.Item, Swift.Array&lt;GymMath.Item&gt;&gt;) -&gt; GymMath.LogView"
+                  moduleName = "GymMath.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///var/folders/37/zh6rmp2x3611sjjcn41px2xh0000gn/T/-921379.@__swiftmacro_7GymMath7LogViewV5items33_060117ABCCC532BAED45B366D9B90427LL5QueryfMp_.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1"
+                  endingLineNumber = "1">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
