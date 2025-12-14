@@ -22,7 +22,7 @@ struct GymMathApp: App {
   }
 
   var sharedModelContainer: ModelContainer = {
-    let schema = Schema([Item.self])
+    let schema = Schema([LogItem.self])
     let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
     do {

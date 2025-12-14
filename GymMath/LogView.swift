@@ -10,9 +10,11 @@ import SwiftData
 
 struct LogView: View {
   @Environment(\.modelContext) private var modelContext
-  @Query private var items: [Item]
+  @Query(sort: [SortDescriptor(\LogItem.timestamp, order: .reverse)]) private var logItems: [LogItem]
   @State private var showingDeleteAllConfirm = false
   @State private var showGlassAlert = false
+  @State private var showAddSheet = false
+  @State private var pendingLogItemTimestamp: Date = .now
 
   var body: some View {
     ZStack {
@@ -20,16 +22,16 @@ struct LogView: View {
 
       VStack(spacing: 12) {
         List {
-          ForEach(items) { item in
+          ForEach(logItems) { logItem in
             NavigationLink {
               ZStack {
                 AppBackground()
 
                 VStack(alignment: .leading, spacing: 12) {
-                  Text("Item")
+                  Text("Log Item")
                     .font(.headline)
 
-                  Text(item.timestamp, format: .dateTime)
+                  Text(logItem.timestamp, format: .dateTime)
                     .font(.subheadline)
                     .opacity(0.9)
                 }
@@ -37,11 +39,11 @@ struct LogView: View {
                 .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                 .padding()
               }
-              .navigationTitle("Item")
+              .navigationTitle("Log Item")
               .toolbarBackground(.hidden, for: .navigationBar)
             } label: {
               HStack(spacing: 8) {
-                Text(item.timestamp, format: .dateTime)
+                Text(logItem.timestamp, format: .dateTime)
                   .lineLimit(1)
                   .truncationMode(.tail)
                   .minimumScaleFactor(0.9)
@@ -53,7 +55,7 @@ struct LogView: View {
             }
             .listRowBackground(Color.clear)
           }
-          .onDelete(perform: deleteItems)
+          .onDelete(perform: deleteLogItems)
         }
         .scrollContentBackground(.hidden)
         .background(Color.clear)
@@ -114,12 +116,81 @@ struct LogView: View {
         .padding(.horizontal, 24)
         .transition(.scale.combined(with: .opacity))
       }
+      
+      if showAddSheet {
+        // Dimmed background behind sheet
+        Color.black.opacity(0.05)
+          .ignoresSafeArea()
+          .transition(.opacity)
+          .onTapGesture { withAnimation(.snappy) { showAddSheet = false } }
+
+        // Bottom sheet container
+        VStack {
+          Spacer()
+          VStack(spacing: 16) {
+            HStack(spacing: 8) {
+              Image(systemName: "plus.circle")
+                .font(.title2)
+                .symbolRenderingMode(.hierarchical)
+              Text("Add Log Item")
+                .font(.headline)
+                .fontWeight(.semibold)
+              Spacer()
+            }
+
+            VStack(alignment: .leading, spacing: 8) {
+              Text("You're about to add:")
+                .font(.subheadline)
+                .opacity(0.9)
+              HStack {
+                Image(systemName: "calendar")
+                Text(pendingLogItemTimestamp, format: .dateTime)
+                  .font(.body)
+                  .fontWeight(.medium)
+              }
+              .opacity(0.95)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            HStack(spacing: 12) {
+              Button(role: .cancel) {
+                withAnimation(.snappy) { showAddSheet = false }
+              } label: {
+                Text("Cancel")
+                  .frame(maxWidth: .infinity)
+              }
+              .buttonStyle(.bordered)
+
+              Button {
+                withAnimation {
+                  modelContext.insert(LogItem(timestamp: pendingLogItemTimestamp))
+                }
+                withAnimation(.snappy) { showAddSheet = false }
+              } label: {
+                Text("Confirm")
+                  .frame(maxWidth: .infinity)
+              }
+              .buttonStyle(.borderedProminent)
+            }
+          }
+          .padding(20)
+          .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+          .overlay(
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+              .strokeBorder(.white.opacity(0.12))
+          )
+          .padding(.horizontal, 12)
+          .padding(.bottom, 8)
+          .transition(.move(edge: .bottom).combined(with: .opacity))
+        }
+      }
     }
     .animation(.snappy, value: showGlassAlert)
+    .animation(.snappy, value: showAddSheet)
     .navigationTitle("Log")
     .toolbar {
       ToolbarItem(placement: .topBarLeading) {
-        if !items.isEmpty {
+        if !logItems.isEmpty {
           Button(action: { showGlassAlert = true }) {
             Label("Delete All", systemImage: "trash")
           }
@@ -127,8 +198,11 @@ struct LogView: View {
         }
       }
       ToolbarItem {
-        Button(action: addItem) {
-          Label("Add Item", systemImage: "plus")
+        Button(action: {
+          pendingLogItemTimestamp = .now
+          showAddSheet = true
+        }) {
+          Label("Add Log Item", systemImage: "plus")
         }
       }
       ToolbarItem(placement: .navigationBarTrailing) {
@@ -140,22 +214,22 @@ struct LogView: View {
 
   private func addItem() {
     withAnimation {
-      modelContext.insert(Item(timestamp: .now))
+      modelContext.insert(LogItem(timestamp: .now))
     }
   }
 
-  private func deleteItems(offsets: IndexSet) {
+  private func deleteLogItems(offsets: IndexSet) {
     withAnimation {
       for index in offsets {
-        modelContext.delete(items[index])
+        modelContext.delete(logItems[index])
       }
     }
   }
 
   private func deleteAllItems() {
     withAnimation {
-      for item in items {
-        modelContext.delete(item)
+      for logItem in logItems {
+        modelContext.delete(logItem)
       }
     }
   }
@@ -163,5 +237,5 @@ struct LogView: View {
 
 #Preview {
   NavigationStack { LogView() }
-    .modelContainer(for: Item.self, inMemory: true)
+    .modelContainer(for: LogItem.self, inMemory: true)
 }
