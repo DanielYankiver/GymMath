@@ -31,22 +31,10 @@ struct WatchContentView: View {
         Button {
           showLiftMenu = true
         } label: {
-          Image(systemName: "list.bullet.clipboard")
-            .font(.title2)
+          Image(systemName: "figure.strengthtraining.traditional.circle")
+            .font(.title)
             .foregroundStyle(.green.opacity(0.9))
             .bold()
-          //            .padding(.top, 6)
-          //          ZStack {
-          //            Image(systemName: "clipboard")
-          //              .font(.title2)
-          //              .bold()
-          //              .foregroundStyle(.green.opacity(0.9))
-          //            Image(systemName: "figure.strengthtraining.traditional")
-          //              .font(.caption2)
-          //              .foregroundStyle(.green.opacity(0.9))
-          //              .bold()
-          //              .padding(.top, 6)
-          //          }
         }
         .buttonStyle(.plain)
 
@@ -102,7 +90,7 @@ struct WatchContentView: View {
         Button {
           print("Take a Screen shot on my watch")
         } label: {
-          Image(systemName: "figure.strengthtraining.traditional.circle")
+          Image(systemName: "list.bullet.circle")
             .font(.largeTitle)
             .foregroundStyle(.gray)
             .bold()
