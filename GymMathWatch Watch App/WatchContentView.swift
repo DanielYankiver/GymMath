@@ -87,7 +87,19 @@ struct WatchContentView: View {
         Spacer().frame(width: 20)
         // Log Weight
         Button {
-          print("Log the weight and send it to phone companion app.")
+          // plates per side CSV (same idea as iPhone)
+          let platesCSV = selectedPlates.map { String($0.weight) }.joined(separator: ",")
+
+          let totalWeight = (selectedPlates.map { $0.weight }.reduce(0, +) * 2) + barWeight
+
+          WatchPhoneSync.shared.sendLog(
+            timestamp: Date(),
+            liftName: selectedLift,
+            totalWeight: totalWeight,
+            barWeight: barWeight,
+            isBar35: isBar35,
+            platesPerSideCSV: platesCSV
+          )
         } label: {
           Image(systemName: "camera.aperture")
             .font(.largeTitle)

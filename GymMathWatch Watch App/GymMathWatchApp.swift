@@ -12,6 +12,9 @@ struct GymMathWatch_Watch_AppApp: App {
   var body: some Scene {
     WindowGroup {
       WatchContentView()
+        .task {
+          WatchPhoneSync.shared.activate()
+        }
     }
   }
 }

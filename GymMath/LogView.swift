@@ -11,7 +11,7 @@ import SwiftData
 struct LogView: View {
   @Environment(\.modelContext) private var modelContext
   @Query(sort: [SortDescriptor(\LogItem.timestamp, order: .reverse)]) private var logItems: [LogItem]
-  @State private var showingDeleteAllConfirm = false
+
   @State private var showGlassAlert = false
   @State private var showAddSheet = false
   @State private var pendingLogItemTimestamp: Date = .now
@@ -24,33 +24,50 @@ struct LogView: View {
         List {
           ForEach(logItems) { logItem in
             NavigationLink {
-              ZStack {
-                AppBackground()
+              detailView(for: logItem)
+            } label: {
+              HStack(alignment: .top, spacing: 10) {
+                // Weight pill
+                Text("\(logItem.totalWeight)lb")
+                  .font(.caption.weight(.heavy))
+                  .padding(.vertical, 6)
+                  .padding(.horizontal, 10)
+                  .background(.ultraThinMaterial, in: Capsule())
+                  .overlay(
+                    Capsule().stroke(.white.opacity(0.12), lineWidth: 1)
+                  )
 
-                VStack(alignment: .leading, spacing: 12) {
-                  Text("Log Item")
-                    .font(.headline)
+                VStack(alignment: .leading, spacing: 4) {
+                  if !logItem.liftName.isEmpty {
+                    Text(logItem.liftName)
+                      .font(.headline)
+                      .lineLimit(1)
+                  } else {
+                    Text("Workout")
+                      .font(.headline)
+                      .lineLimit(1)
+                  }
 
                   Text(logItem.timestamp, format: .dateTime)
                     .font(.subheadline)
-                    .opacity(0.9)
+                    .opacity(0.85)
+                    .lineLimit(1)
+
+                  if !logItem.platesPerSideCSV.isEmpty {
+                    Text("Plates/side: \(logItem.platesPerSideCSV)")
+                      .font(.caption)
+                      .opacity(0.75)
+                      .lineLimit(1)
+                  } else {
+                    Text("Bar: \(logItem.barWeight)lb")
+                      .font(.caption)
+                      .opacity(0.75)
+                  }
                 }
-                .padding()
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .padding()
+
+                Spacer(minLength: 0)
               }
-              .navigationTitle("Log Item")
-              .toolbarBackground(.hidden, for: .navigationBar)
-            } label: {
-              HStack(spacing: 8) {
-                Text(logItem.timestamp, format: .dateTime)
-                  .lineLimit(1)
-                  .truncationMode(.tail)
-                  .minimumScaleFactor(0.9)
-                  .allowsTightening(true)
-                  .layoutPriority(1)
-                  .frame(maxWidth: .infinity, alignment: .leading)
-              }
+              .padding(.vertical, 6)
               .contentShape(Rectangle())
             }
             .listRowBackground(Color.clear)
@@ -64,13 +81,11 @@ struct LogView: View {
       }
 
       if showGlassAlert {
-        // Dimmed background
         Color.black.opacity(0.35)
           .ignoresSafeArea()
           .transition(.opacity)
           .onTapGesture { withAnimation(.snappy) { showGlassAlert = false } }
 
-        // Glass dialog
         VStack(spacing: 16) {
           HStack(spacing: 8) {
             Image(systemName: "trash")
@@ -116,15 +131,13 @@ struct LogView: View {
         .padding(.horizontal, 24)
         .transition(.scale.combined(with: .opacity))
       }
-      
+
       if showAddSheet {
-        // Dimmed background behind sheet
         Color.black.opacity(0.05)
           .ignoresSafeArea()
           .transition(.opacity)
           .onTapGesture { withAnimation(.snappy) { showAddSheet = false } }
 
-        // Bottom sheet container
         VStack {
           Spacer()
           VStack(spacing: 16) {
@@ -139,9 +152,10 @@ struct LogView: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-              Text("You're about to add:")
+              Text("Timestamp:")
                 .font(.subheadline)
                 .opacity(0.9)
+
               HStack {
                 Image(systemName: "calendar")
                 Text(pendingLogItemTimestamp, format: .dateTime)
@@ -212,10 +226,58 @@ struct LogView: View {
     .toolbarBackground(.hidden, for: .navigationBar)
   }
 
-  private func addItem() {
-    withAnimation {
-      modelContext.insert(LogItem(timestamp: .now))
+  private func detailView(for logItem: LogItem) -> some View {
+    ZStack {
+      AppBackground()
+
+      VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 6) {
+          Text("\(logItem.totalWeight) lb")
+            .font(.system(size: 44, weight: .heavy, design: .rounded))
+            .monospacedDigit()
+
+          if !logItem.liftName.isEmpty {
+            Text(logItem.liftName.uppercased())
+              .font(.caption.weight(.bold))
+              .opacity(0.85)
+          }
+
+          Text(logItem.timestamp, format: .dateTime)
+            .font(.subheadline)
+            .opacity(0.85)
+        }
+
+        VStack(alignment: .leading, spacing: 10) {
+          HStack {
+            Text("Bar")
+              .font(.headline)
+            Spacer()
+            Text("\(logItem.barWeight) lb" + (logItem.isBar35 ? " (35)" : " (45)"))
+              .font(.subheadline.weight(.semibold))
+              .opacity(0.9)
+          }
+
+          if !logItem.platesPerSideCSV.isEmpty {
+            HStack(alignment: .top) {
+              Text("Plates / side")
+                .font(.headline)
+              Spacer()
+              Text(logItem.platesPerSideCSV)
+                .font(.subheadline.weight(.semibold))
+                .multilineTextAlignment(.trailing)
+                .opacity(0.9)
+            }
+          }
+        }
+        .padding()
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+
+        Spacer()
+      }
+      .padding()
     }
+    .navigationTitle("Log Item")
+    .toolbarBackground(.hidden, for: .navigationBar)
   }
 
   private func deleteLogItems(offsets: IndexSet) {
