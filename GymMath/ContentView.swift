@@ -11,6 +11,13 @@ struct ContentView: View {
   var body: some View {
     TabView {
       NavigationStack {
+        GymMathView()
+      }
+      .tabItem {
+        Label("GymMath", systemImage: "dumbbell.fill")
+      }
+
+      NavigationStack {
         LogView()
       }
       .tabItem {
@@ -22,13 +29,6 @@ struct ContentView: View {
       }
       .tabItem {
         Label("Profile", systemImage: "person.crop.circle")
-      }
-
-      NavigationStack {
-        StatsView()
-      }
-      .tabItem {
-        Label("Stats", systemImage: "chart.bar.xaxis")
       }
     }
     // Liquid-glass bottom bar look

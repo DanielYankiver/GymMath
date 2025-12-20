@@ -37,8 +37,7 @@ struct WatchContentView: View {
             .bold()
         }
         .buttonStyle(.plain)
-
-
+        .padding(.top, -14) // MARK: - play with this
         Spacer()
       }
       .fullScreenCover(isPresented: $showLiftMenu) {
@@ -71,7 +70,7 @@ struct WatchContentView: View {
         }
         .buttonStyle(.plain)
 
-        Spacer()
+        Spacer().frame(width: 20)
         // Clear Plates Button
         Button{
           selectedPlates.removeAll()
@@ -85,12 +84,12 @@ struct WatchContentView: View {
         //        .padding(.leading, 20)
         .disabled(selectedPlates.isEmpty)
 
-        Spacer()
-        // Screen Shot
+        Spacer().frame(width: 20)
+        // Log Weight
         Button {
-          print("Take a Screen shot on my watch")
+          print("Log the weight and send it to phone companion app.")
         } label: {
-          Image(systemName: "list.bullet.circle")
+          Image(systemName: "camera.aperture")
             .font(.largeTitle)
             .foregroundStyle(.gray)
             .bold()
