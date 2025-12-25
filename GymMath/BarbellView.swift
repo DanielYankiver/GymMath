@@ -30,12 +30,6 @@ struct BarbellView: View {
           .monospacedDigit()
           .minimumScaleFactor(0.6)
           .lineLimit(1)
-
-        if !selectedLift.isEmpty {
-          Text(selectedLift.uppercased())
-            .font(.system(size: 12, weight: .bold, design: .rounded))
-            .opacity(0.9)
-        }
       }
 
       // Bar
@@ -77,7 +71,6 @@ struct BarbellView: View {
       .frame(height: 190)
     }
     .padding()
-    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
   }
 
   @ViewBuilder
