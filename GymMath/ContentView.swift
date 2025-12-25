@@ -16,7 +16,12 @@ struct ContentView: View {
       .tabItem {
         Label("GymMath", systemImage: "dumbbell.fill")
       }
-
+      NavigationStack {
+        PlayView()
+      }
+      .tabItem {
+        Label("Play", systemImage: "play.fill")
+      }
       NavigationStack {
         LogView()
       }

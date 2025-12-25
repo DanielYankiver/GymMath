@@ -37,32 +37,6 @@ struct GymMathView: View {
 
       ScrollView {
         VStack(spacing: 14) {
-
-          // Pick a Lift (matches Watch flow)
-          HStack {
-            Spacer()
-
-            Button {
-              showLiftMenu = true
-            } label: {
-              Image(systemName: "figure.strengthtraining.traditional.circle")
-                .font(.system(size: 36, weight: .bold))
-                .foregroundStyle(.green.opacity(0.9))
-                .padding(10)
-                .background(.ultraThinMaterial, in: Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Pick a lift")
-
-            Spacer()
-          }
-          .padding(.top, 4)
-          .sheet(isPresented: $showLiftMenu) {
-            LiftMenuView(selectedLift: $selectedLift)
-              .presentationDetents([.medium, .large])
-              .presentationDragIndicator(.visible)
-          }
-
           // Barbell + plates + total
           BarbellView(
             selectedPlates: selectedPlates,
@@ -92,43 +66,65 @@ struct GymMathView: View {
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Toggle bar weight")
-
-            // Clear plates
-            Button {
-              selectedPlates.removeAll()
-            } label: {
-              Image(systemName: "x.circle")
-                .font(.system(size: 34, weight: .bold))
-                .foregroundStyle(selectedPlates.isEmpty ? .gray : .red)
-                .padding(10)
-                .background(.ultraThinMaterial, in: Circle())
-            }
-            .buttonStyle(.plain)
-            .disabled(selectedPlates.isEmpty)
-            .accessibilityLabel("Clear plates")
-
-            // Log the weight to your Log tab
-            Button {
-              logCurrentSetup()
-            } label: {
-              Image(systemName: "camera.aperture")
-                .font(.system(size: 34, weight: .bold))
-                .foregroundStyle(.white.opacity(0.9))
-                .padding(10)
-                .background(.ultraThinMaterial, in: Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Log weight")
           }
           .padding(.top, 2)
           .padding(.bottom, 18)
         }
         .padding(.horizontal, 14)
         .padding(.top, 6)
+        // Lift Menu
+        .sheet(isPresented: $showLiftMenu) {
+          LiftMenuView(selectedLift: $selectedLift)
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+        }
       }
     }
-    .navigationTitle("GymMath")
-    .toolbarBackground(.hidden, for: .navigationBar)
+    .toolbar {
+      // MARK: - Left
+      ToolbarItemGroup(placement: .topBarLeading) {
+        Button {
+          selectedPlates.removeAll()
+        } label: {
+          Image(systemName: "trash")
+        }
+      }
+
+      // MARK: - Center
+      ToolbarItem(placement: .principal) {
+        VStack {
+          Button {
+            showLiftMenu = true
+          } label: {
+            if !selectedLift.isEmpty {
+              Text(selectedLift.uppercased())
+                .font(.system(size: 12, weight: .bold, design: .rounded))
+                .frame(width: 200, height: 32)
+            } else {
+              Image(systemName: "figure.strengthtraining.traditional")
+                .font(.headline)
+                .foregroundStyle(.white)
+                .frame(width: 200, height: 32)
+            }
+          }
+          .padding(6)
+        }
+        .glassEffect(
+          .regular.interactive(),
+          in: .capsule
+        )
+      }
+
+
+      // MARK: - Right
+      ToolbarItemGroup(placement: .topBarTrailing) {
+        Button {
+          logCurrentSetup()
+        } label: {
+          Image(systemName: "square.and.arrow.down")
+        }
+      }
+    }
   }
 
   private func logCurrentSetup() {
