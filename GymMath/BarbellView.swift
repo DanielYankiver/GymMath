@@ -21,9 +21,26 @@ struct BarbellView: View {
     isBar35 ? .pink : .blue
   }
 
+  // Tuning
+  private let centerGap: CGFloat = 130
+  private let maxPlateBlock: CGFloat = 180
+  private let barHeight: CGFloat = 14
+  private let sleeveHeight: CGFloat = 18
+
+  private var maxPlateHeight: CGFloat {
+    let h = selectedPlates.map(\.height).max() ?? 0
+    // give a nice minimum so the bar area doesn't collapse when empty
+    return max(h, 90)
+  }
+
+  private var renderHeight: CGFloat {
+    // Plates should straddle the bar, so give space above/below
+    maxPlateHeight + 40
+  }
+
   var body: some View {
     VStack(spacing: 10) {
-      // Total + lift
+      // Total
       VStack(spacing: 4) {
         Text("\(totalWeight) lb")
           .font(.system(size: 46, weight: .heavy, design: .rounded))
@@ -32,43 +49,49 @@ struct BarbellView: View {
           .lineLimit(1)
       }
 
-      // Bar
-      RoundedRectangle(cornerRadius: 6, style: .continuous)
-        .fill(Color(red: 0.18, green: 0.18, blue: 0.18))
-        .frame(height: 14)
-        .overlay(
-          RoundedRectangle(cornerRadius: 6, style: .continuous)
-            .stroke(barTint.opacity(0.45), lineWidth: 2)
-        )
-        .padding(.vertical, 10)
-
       GeometryReader { proxy in
-        let availableHalf = max(0, (proxy.size.width - 130) / 2)
-        let plateBlockWidth = min(availableHalf, 180)
+        let availableHalf = max(0, (proxy.size.width - centerGap) / 2)
+        let plateBlockWidth = min(availableHalf, maxPlateBlock)
 
-        HStack(spacing: 0) {
-          // Left plates (reverse so biggest is closest to sleeve)
+        ZStack {
+          // BAR (runs through the CENTER of the plates)
+          RoundedRectangle(cornerRadius: 6, style: .continuous)
+            .fill(Color(red: 0.18, green: 0.18, blue: 0.18))
+            .frame(height: barHeight)
+            .overlay(
+              RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .stroke(barTint.opacity(0.45), lineWidth: 2)
+            )
+            .frame(maxWidth: .infinity)
+            .position(x: proxy.size.width / 2, y: proxy.size.height / 2)
+
+          // PLATES (centered on the bar)
           HStack(spacing: 0) {
-            ForEach(selectedPlates.reversed(), id: \.id) { plate in
-              plateView(plate)
+            // Left plates (reverse so biggest is closest to sleeve)
+            HStack(spacing: 0) {
+              ForEach(selectedPlates.reversed(), id: \.id) { plate in
+                plateView(plate)
+              }
             }
-          }
-          .frame(width: plateBlockWidth, alignment: .trailing)
+            .frame(width: plateBlockWidth, alignment: .trailing)
 
-          // Center sleeve gap
-          Spacer().frame(width: 130)
+            Spacer().frame(width: centerGap)
 
-          // Right plates
-          HStack(spacing: 0) {
-            ForEach(selectedPlates, id: \.id) { plate in
-              plateView(plate)
+            // Right plates
+            HStack(spacing: 0) {
+              ForEach(selectedPlates, id: \.id) { plate in
+                plateView(plate)
+              }
             }
+            .frame(width: plateBlockWidth, alignment: .leading)
           }
-          .frame(width: plateBlockWidth, alignment: .leading)
+          // This centers the entire plate row on the bar
+          .frame(maxWidth: .infinity)
+          .position(x: proxy.size.width / 2, y: proxy.size.height / 2)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
       }
-      .frame(height: 190)
+      .frame(height: renderHeight)
     }
     .padding()
   }

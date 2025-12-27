@@ -35,10 +35,9 @@ struct GymMathView: View {
     ZStack {
       AppBackground()
 
-      ScrollView {
-
+      VStack {
         // Label + Glass Card
-        VStack(spacing: 14) {
+        VStack {
             // Barbell + plates + total
             BarbellView(
               selectedPlates: selectedPlates,
@@ -46,31 +45,44 @@ struct GymMathView: View {
               isBar35: isBar35,
               selectedLift: selectedLift
             )
+          .padding(.horizontal, 14)
+          .padding(.top, 6)
+          // Lift Menu
+          .sheet(isPresented: $showLiftMenu) {
+            LiftMenuView(selectedLift: $selectedLift)
+              .presentationDetents([.medium, .large])
+              .presentationDragIndicator(.visible)
+          }
 
-            // Plate picker + +/- (same cap as Watch)
-            PlateSelectionView(plates: plates, selectedPlates: $selectedPlates)
+        }
+        .padding(16)
+        .frame(maxWidth: 380, alignment: .leading)
+        .glassEffect(
+          .clear,
+          in: RoundedRectangle(
+            cornerRadius: 24,
+            style: .continuous
+          )
+        )
+        // subtle outline l
+        .overlay(
+          RoundedRectangle(cornerRadius: 24, style: .continuous)
+            .stroke(
+              LinearGradient(
+                colors: [
+                  .white.opacity(0.35),
+                  .white.opacity(0.05)
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+              ),
+              lineWidth: 1
+            )
+        )
 
-            // Action row (bar type, clear, log)
-            HStack(spacing: 18) {
-
-              // Toggle bar size (45 ↔ 35)
-              Button {
-                isBar35.toggle()
-                barWeight = isBar35 ? 35 : 45
-              } label: {
-                Image(systemName: "arrowshape.up.circle")
-                  .font(.system(size: 34, weight: .bold))
-                  .foregroundStyle(isBar35 ? .pink : .blue)
-                  .rotationEffect(.degrees(isBar35 ? 180 : 0))
-                  .animation(.easeInOut(duration: 0.25), value: isBar35)
-                  .padding(10)
-                  .background(.ultraThinMaterial, in: Circle())
-              }
-              .buttonStyle(.plain)
-              .accessibilityLabel("Toggle bar weight")
-            }
-            .padding(.top, 2)
-            .padding(.bottom, 18)
+        VStack(spacing: 14) {
+          // Plate picker + +/- (same cap as Watch)
+          PlateSelectionView(plates: plates, selectedPlates: $selectedPlates)
 
           .padding(.horizontal, 14)
           .padding(.top, 6)
@@ -107,8 +119,29 @@ struct GymMathView: View {
             )
         )
 
+        // Action row (bar type, clear, log)
+        HStack(spacing: 18) {
 
+          // Toggle bar size (45 ↔ 35)
+          Button {
+            isBar35.toggle()
+            barWeight = isBar35 ? 35 : 45
+          } label: {
+            Image(systemName: "arrowshape.up.circle")
+              .font(.system(size: 34, weight: .bold))
+              .foregroundStyle(isBar35 ? .pink : .blue)
+              .rotationEffect(.degrees(isBar35 ? 180 : 0))
+              .animation(.easeInOut(duration: 0.25), value: isBar35)
+              .padding(10)
+              .background(.ultraThinMaterial, in: Circle())
+          }
+          .buttonStyle(.plain)
+          .accessibilityLabel("Toggle bar weight")
+        }
+        .padding(.top, 2)
+        .padding(.bottom, 18)
       }
+//      .scrollIndicators(.hidden)
     }
     .toolbar {
       // MARK: - Left
