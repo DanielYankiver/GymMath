@@ -17,6 +17,17 @@ struct GymMathView: View {
   @State private var showLiftMenu = false
   @State private var selectedLift: String = ""
 
+  // MARK: - View Switching
+  private enum MathView: String, CaseIterable, Identifiable {
+    case barbellMath = "BarbellMath"
+    case airBikeMath = "AirBikeMath"
+
+    var id: String { rawValue }
+    var title: String { rawValue }
+  }
+
+  @State private var selectedMathView: MathView = .barbellMath
+
   // Same plate options as the Watch app
   private let plates: [Plate] = [
     Plate(weight: 45),
@@ -35,164 +46,31 @@ struct GymMathView: View {
     ZStack {
       AppBackground()
 
-      VStack {
+      Group {
+        switch selectedMathView {
+        case .barbellMath:
+          BarbellMathView(
+            selectedPlates: $selectedPlates,
+            isBar35: $isBar35,
+            barWeight: $barWeight,
+            showLiftMenu: $showLiftMenu,
+            selectedLift: $selectedLift,
+            plates: plates,
+            onLog: logCurrentSetup
+          )
+          .padding(.top, -10)
 
-        // TODO: - Move to barbell component and add views like run to airbike conversion
-        // Label + Glass Card
-        VStack {
-            // Barbell + plates + total
-            BarbellView(
-              selectedPlates: selectedPlates,
-              barWeight: barWeight,
-              isBar35: isBar35,
-              selectedLift: selectedLift
-            )
+        case .airBikeMath:
+          AirBikeMathView()
+            .padding(.top, -10)
         }
-        .frame(width: 380, height: 260)
-        .glassEffect(
-          .clear,
-          in: RoundedRectangle(
-            cornerRadius: 24,
-            style: .continuous
-          )
-        )
-        // subtle outline l
-        .overlay(
-          RoundedRectangle(cornerRadius: 24, style: .continuous)
-            .stroke(
-              LinearGradient(
-                colors: [
-                  .white.opacity(0.35),
-                  .white.opacity(0.05)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-              ),
-              lineWidth: 1
-            )
-        )
-
-        Spacer().frame(height: 20)
-
-        VStack(spacing: 14) {
-          // Plate picker + +/- (same cap as Watch)
-          PlateSelectionView(plates: plates, selectedPlates: $selectedPlates)
-
-          .padding(.horizontal, 14)
-          .padding(.top, 6)
-          // Lift Menu
-          .sheet(isPresented: $showLiftMenu) {
-            LiftMenuView(selectedLift: $selectedLift)
-              .presentationDetents([.medium, .large])
-              .presentationDragIndicator(.visible)
-          }
-
-        }
-        .padding(16)
-        .frame(maxWidth: 380, alignment: .leading)
-        .glassEffect(
-          .clear,
-          in: RoundedRectangle(
-            cornerRadius: 24,
-            style: .continuous
-          )
-        )
-        // subtle outline l
-        .overlay(
-          RoundedRectangle(cornerRadius: 24, style: .continuous)
-            .stroke(
-              LinearGradient(
-                colors: [
-                  .white.opacity(0.35),
-                  .white.opacity(0.05)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-              ),
-              lineWidth: 1
-            )
-        )
-
-        Spacer().frame(height: 40)
-
-        VStack {
-          Button {
-            logCurrentSetup()
-          } label: {
-            Text("LOG LIFT")
-              .font(.title.bold())
-              .foregroundStyle(.white)
-              .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-              .frame(height: 54)
-              .contentShape(
-                RoundedRectangle(
-                  cornerRadius: 24,
-                  style: .continuous
-                )
-              )
-          }
-          .buttonStyle(.plain)
-          .padding(7)
-          .frame(maxWidth: 380)
-          .glassEffect(
-            .clear.interactive(),
-            in: RoundedRectangle(
-              cornerRadius: 24,
-              style: .continuous
-            )
-          )
-          .overlay(
-            RoundedRectangle(cornerRadius: 24, style: .continuous)
-              .stroke(
-                LinearGradient(
-                  colors: [
-                    .white.opacity(0.35),
-                    .white.opacity(0.05)
-                  ],
-                  startPoint: .topLeading,
-                  endPoint: .bottomTrailing
-                ),
-                lineWidth: 1
-              )
-          )
-        }
-
-
-        Spacer()
-
-
-
-        // TODO: - Action Row
-        // Change bar weight,
-        // Reorder plates from Big -> Small,
-        // Remove last plate move?
-//        HStack(spacing: 18) {
-//          // Toggle bar size (45 ↔ 35)
-//          Button {
-//            isBar35.toggle()
-//            barWeight = isBar35 ? 35 : 45
-//          } label: {
-//            Image(systemName: "arrowshape.up.circle")
-//              .font(.system(size: 34, weight: .bold))
-//              .foregroundStyle(isBar35 ? .pink : .blue)
-//              .rotationEffect(.degrees(isBar35 ? 180 : 0))
-//              .animation(.easeInOut(duration: 0.25), value: isBar35)
-//              .padding(10)
-//              .background(.ultraThinMaterial, in: Circle())
-//          }
-//          .buttonStyle(.plain)
-//          .accessibilityLabel("Toggle bar weight")
-//        }
-//        .padding(.top, 2)
-//        .padding(.bottom, 18)
       }
-//      .scrollIndicators(.hidden)
-    }
-    // Lift Menu
-    .sheet(isPresented: $showLiftMenu) {
-      LiftMenuView(selectedLift: $selectedLift)
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
+      // Lift Menu (kept here so it works regardless of which view is showing)
+      .sheet(isPresented: $showLiftMenu) {
+        LiftMenuView(selectedLift: $selectedLift)
+          .presentationDetents([.medium, .large])
+          .presentationDragIndicator(.visible)
+      }
     }
     .toolbar {
       // MARK: - Left
@@ -204,38 +82,17 @@ struct GymMathView: View {
         }
       }
 
-      // MARK: - Center
-      ToolbarItem(placement: .principal) {
-        VStack {
-          Button {
-            showLiftMenu = true
-          } label: {
-            if !selectedLift.isEmpty {
-              Text(selectedLift.uppercased())
-                .font(.system(size: 12, weight: .bold, design: .rounded))
-                .frame(width: 200, height: 32)
-            } else {
-              Image(systemName: "figure.strengthtraining.traditional")
-                .font(.headline)
-                .foregroundStyle(.white)
-                .frame(width: 200, height: 32)
-            }
-          }
-          .padding(6)
-        }
-        .glassEffect(
-          .regular.interactive(),
-          in: .capsule
-        )
-      }
+      // ✅ Center toolbar item is now owned by BarbellMathView only
 
-
-      // MARK: - Right
+      // MARK: - Right (Popover Menu)
       ToolbarItemGroup(placement: .topBarTrailing) {
-        Button {
-          logCurrentSetup()
+        Menu {
+          Picker("Math View", selection: $selectedMathView) {
+            Text(MathView.barbellMath.title).tag(MathView.barbellMath)
+            Text(MathView.airBikeMath.title).tag(MathView.airBikeMath)
+          }
         } label: {
-          Image(systemName: "square.and.arrow.down")
+          Image(systemName: "ellipsis")
         }
       }
     }

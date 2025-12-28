@@ -36,6 +36,7 @@ struct ContentView: View {
         Label("Profile", systemImage: "person.crop.circle")
       }
     }
+    .tint(.gray)
     // Liquid-glass bottom bar look
     .toolbarBackground(.ultraThinMaterial, for: .tabBar)
     .toolbarBackground(.visible, for: .tabBar)
