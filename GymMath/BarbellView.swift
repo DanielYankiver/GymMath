@@ -17,14 +17,10 @@ struct BarbellView: View {
     barWeight + (selectedPlates.reduce(0) { $0 + $1.weight } * 2)
   }
 
-  private var barTint: Color {
-    isBar35 ? .pink : .blue
-  }
-
   // Tuning
   private let centerGap: CGFloat = 130
   private let maxPlateBlock: CGFloat = 180
-  private let barHeight: CGFloat = 14
+  private let barHeight: CGFloat = 8
   private let sleeveHeight: CGFloat = 18
 
   private var maxPlateHeight: CGFloat {
@@ -55,11 +51,10 @@ struct BarbellView: View {
         ZStack {
           // BAR (runs through the CENTER of the plates)
           RoundedRectangle(cornerRadius: 6, style: .continuous)
-            .fill(Color(red: 0.18, green: 0.18, blue: 0.18))
             .frame(height: barHeight)
             .overlay(
-              RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .stroke(barTint.opacity(0.45), lineWidth: 2)
+              RoundedRectangle(cornerRadius: 3, style: .continuous)
+                .stroke(.white.opacity(0.45), lineWidth: 1)
             )
             .frame(maxWidth: .infinity)
             .position(x: proxy.size.width / 2, y: proxy.size.height / 2)
@@ -101,9 +96,8 @@ struct BarbellView: View {
       .fill(Color(red: 0.2, green: 0.2, blue: 0.2))
       .frame(width: plate.width, height: plate.height)
       .overlay(
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
+        RoundedRectangle(cornerRadius: 2, style: .continuous)
           .stroke(Color.gray.opacity(0.9), lineWidth: 1)
       )
-      .padding(.horizontal, 1)
   }
 }

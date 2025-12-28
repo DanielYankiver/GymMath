@@ -14,24 +14,24 @@ struct Plate: Identifiable, Equatable {
   // Dimensions tuned for iPhone (bigger than Watch)
   var height: CGFloat {
     switch weight {
-    case 45: return 170
-    case 35: return 165
-    case 25: return 160
-    case 15: return 150
-    case 10: return 140
-    case 5:  return 110
+    case 45: return 100
+    case 35: return 100
+    case 25: return 100
+    case 15: return 100
+    case 10: return 100
+    case 5:  return 50
     default: return 0
     }
   }
 
   var width: CGFloat {
     switch weight {
-    case 45: return 26
-    case 35: return 22
-    case 25: return 20
-    case 15: return 16
-    case 10: return 14
-    case 5:  return 10
+    case 45: return 13
+    case 35: return 12
+    case 25: return 10
+    case 15: return 8
+    case 10: return 6
+    case 5:  return 4
     default: return 0
     }
   }
