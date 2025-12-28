@@ -36,6 +36,8 @@ struct GymMathView: View {
       AppBackground()
 
       VStack {
+
+        // TODO: - Move to barbell component and add views like run to airbike conversion
         // Label + Glass Card
         VStack {
             // Barbell + plates + total
@@ -45,18 +47,8 @@ struct GymMathView: View {
               isBar35: isBar35,
               selectedLift: selectedLift
             )
-          .padding(.horizontal, 14)
-          .padding(.top, 6)
-          // Lift Menu
-          .sheet(isPresented: $showLiftMenu) {
-            LiftMenuView(selectedLift: $selectedLift)
-              .presentationDetents([.medium, .large])
-              .presentationDragIndicator(.visible)
-          }
-
         }
-        .padding(16)
-        .frame(maxWidth: 380, alignment: .leading)
+        .frame(width: 380, height: 260)
         .glassEffect(
           .clear,
           in: RoundedRectangle(
@@ -79,6 +71,8 @@ struct GymMathView: View {
               lineWidth: 1
             )
         )
+
+        Spacer().frame(height: 20)
 
         VStack(spacing: 14) {
           // Plate picker + +/- (same cap as Watch)
@@ -119,29 +113,86 @@ struct GymMathView: View {
             )
         )
 
-        // Action row (bar type, clear, log)
-        HStack(spacing: 18) {
+        Spacer().frame(height: 40)
 
-          // Toggle bar size (45 ↔ 35)
+        VStack {
           Button {
-            isBar35.toggle()
-            barWeight = isBar35 ? 35 : 45
+            logCurrentSetup()
           } label: {
-            Image(systemName: "arrowshape.up.circle")
-              .font(.system(size: 34, weight: .bold))
-              .foregroundStyle(isBar35 ? .pink : .blue)
-              .rotationEffect(.degrees(isBar35 ? 180 : 0))
-              .animation(.easeInOut(duration: 0.25), value: isBar35)
-              .padding(10)
-              .background(.ultraThinMaterial, in: Circle())
+            Text("LOG LIFT")
+              .font(.title.bold())
+              .foregroundStyle(.white)
+              .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+              .frame(height: 54)
+              .contentShape(
+                RoundedRectangle(
+                  cornerRadius: 24,
+                  style: .continuous
+                )
+              )
           }
           .buttonStyle(.plain)
-          .accessibilityLabel("Toggle bar weight")
+          .padding(7)
+          .frame(maxWidth: 380)
+          .glassEffect(
+            .clear.interactive(),
+            in: RoundedRectangle(
+              cornerRadius: 24,
+              style: .continuous
+            )
+          )
+          .overlay(
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+              .stroke(
+                LinearGradient(
+                  colors: [
+                    .white.opacity(0.35),
+                    .white.opacity(0.05)
+                  ],
+                  startPoint: .topLeading,
+                  endPoint: .bottomTrailing
+                ),
+                lineWidth: 1
+              )
+          )
         }
-        .padding(.top, 2)
-        .padding(.bottom, 18)
+
+
+        Spacer()
+
+
+
+        // TODO: - Action Row
+        // Change bar weight,
+        // Reorder plates from Big -> Small,
+        // Remove last plate move?
+//        HStack(spacing: 18) {
+//          // Toggle bar size (45 ↔ 35)
+//          Button {
+//            isBar35.toggle()
+//            barWeight = isBar35 ? 35 : 45
+//          } label: {
+//            Image(systemName: "arrowshape.up.circle")
+//              .font(.system(size: 34, weight: .bold))
+//              .foregroundStyle(isBar35 ? .pink : .blue)
+//              .rotationEffect(.degrees(isBar35 ? 180 : 0))
+//              .animation(.easeInOut(duration: 0.25), value: isBar35)
+//              .padding(10)
+//              .background(.ultraThinMaterial, in: Circle())
+//          }
+//          .buttonStyle(.plain)
+//          .accessibilityLabel("Toggle bar weight")
+//        }
+//        .padding(.top, 2)
+//        .padding(.bottom, 18)
       }
 //      .scrollIndicators(.hidden)
+    }
+    // Lift Menu
+    .sheet(isPresented: $showLiftMenu) {
+      LiftMenuView(selectedLift: $selectedLift)
+        .presentationDetents([.medium, .large])
+        .presentationDragIndicator(.visible)
     }
     .toolbar {
       // MARK: - Left

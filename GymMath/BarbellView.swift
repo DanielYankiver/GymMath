@@ -45,7 +45,6 @@ struct BarbellView: View {
         Text("\(totalWeight) lb")
           .font(.system(size: 46, weight: .heavy, design: .rounded))
           .monospacedDigit()
-          .minimumScaleFactor(0.6)
           .lineLimit(1)
       }
 
