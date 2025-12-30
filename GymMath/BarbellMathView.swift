@@ -113,13 +113,13 @@ struct BarbellMathView: View {
           } label: {
             if !selectedLift.isEmpty {
               Text(selectedLift.uppercased())
-                .font(.system(size: 18, weight: .bold, design: .rounded))
-                .frame(width: 200, height: 32)
+                .font(.system(size: 14, weight: .bold, design: .rounded))
+                .frame(width: 150, height: 30)
             } else {
               Image(systemName: "figure.strengthtraining.traditional")
                 .font(.headline)
                 .foregroundStyle(.white)
-                .frame(width: 200, height: 32)
+                .frame(width: 150, height: 30)
             }
           }
           .padding(6)

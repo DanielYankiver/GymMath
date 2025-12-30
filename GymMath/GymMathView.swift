@@ -73,27 +73,44 @@ struct GymMathView: View {
       }
     }
     .toolbar {
-      // MARK: - Left
-      ToolbarItemGroup(placement: .topBarLeading) {
-        Button {
-          selectedPlates.removeAll()
-        } label: {
-          Image(systemName: "trash")
+      ToolbarItem(placement: .topBarLeading) {
+        HStack(spacing: 14) {
+          Button {
+            selectedPlates.removeAll()
+          } label: {
+            Image(systemName: "trash")
+          }
+
+          Button {
+            print("Hello from hand")
+          } label: {
+            Image(systemName: "hand.raised")
+          }
         }
+        .padding(.horizontal, 8)
       }
+
 
       // ✅ Center toolbar item is now owned by BarbellMathView only
 
       // MARK: - Right (Popover Menu)
       ToolbarItemGroup(placement: .topBarTrailing) {
-        Menu {
-          Picker("Math View", selection: $selectedMathView) {
-            Text(MathView.barbellMath.title).tag(MathView.barbellMath)
-            Text(MathView.airBikeMath.title).tag(MathView.airBikeMath)
+        HStack(spacing: 14) {
+          Button {
+            print("Hello from hand")
+          } label: {
+            Image(systemName: "hand.raised")
           }
-        } label: {
-          Image(systemName: "ellipsis")
+          Menu {
+            Picker("Math View", selection: $selectedMathView) {
+              Text(MathView.barbellMath.title).tag(MathView.barbellMath)
+              Text(MathView.airBikeMath.title).tag(MathView.airBikeMath)
+            }
+          } label: {
+            Image(systemName: "ellipsis")
+          }
         }
+        .padding(.horizontal, 8)
       }
     }
   }

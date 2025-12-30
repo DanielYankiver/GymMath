@@ -38,7 +38,7 @@ struct BarbellView: View {
     VStack(spacing: 10) {
       // Total
       VStack(spacing: 4) {
-        Text("\(totalWeight) lb")
+        Text("\(totalWeight) lb X Reps")
           .font(.system(size: 46, weight: .heavy, design: .rounded))
           .monospacedDigit()
           .lineLimit(1)
